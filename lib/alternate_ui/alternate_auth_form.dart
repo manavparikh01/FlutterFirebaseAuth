@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AuthForm extends StatefulWidget {
-  AuthForm(
+class AlternateAuthForm extends StatefulWidget {
+  AlternateAuthForm(
     this.submitFN,
     this.isLoading,
   );
@@ -11,15 +11,25 @@ class AuthForm extends StatefulWidget {
       bool isLogin, BuildContext ctx) submitFN;
 
   @override
-  _AuthFormState createState() => _AuthFormState();
+  _AlternateAuthFormState createState() => _AlternateAuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AlternateAuthFormState extends State<AlternateAuthForm> {
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  RegExp emailRegex = new RegExp(
+    r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  RegExp passwordRegex = new RegExp(
+      r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+      caseSensitive: false,
+      multiLine: false);
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -60,7 +70,7 @@ class _AuthFormState extends State<AuthForm> {
                     TextFormField(
                       key: ValueKey('email'),
                       validator: (value) {
-                        if (value.isEmpty || !value.contains('@')) {
+                        if (value.isEmpty || !emailRegex.hasMatch(value)) {
                           return 'Please enter a valid email address.';
                         }
                         return null;
@@ -88,8 +98,14 @@ class _AuthFormState extends State<AuthForm> {
                     TextFormField(
                       key: ValueKey('password'),
                       validator: (value) {
-                        if (value.isEmpty || value.length < 7) {
-                          return 'Password must be at least 7 characters long.';
+                        if (value.isEmpty || !passwordRegex.hasMatch(value)) {
+                          return '''
+Password must contain
+1. Lower case letters 
+2. Upper case letters
+3. One special character 
+4. One numerical character
+                          ''';
                         }
                         return null;
                       },

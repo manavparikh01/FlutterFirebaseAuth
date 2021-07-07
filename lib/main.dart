@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterauth/alternate_ui/alternae_auth_page_ui.dart';
 import 'package:flutterauth/views/ChatPage.dart';
 import 'package:get/get.dart';
 import 'controllers/auth_controller.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
             getxController.authUserId.value = userSnapshot.data.uid;
             return ChatPage();
           }
-          return AuthPage();
+          return AuthPageAlternate();
         },
       ),
     );
